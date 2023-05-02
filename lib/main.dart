@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/screens/emai_auth/login_screen.dart';
 import 'package:flutter_firebase/screens/home_screen.dart';
 import 'firebase_options.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:HomeScreen(),
+      home:LoginScreen(),
     );
   }
 }
