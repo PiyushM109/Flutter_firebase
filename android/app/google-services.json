@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "15751013607",
+    "project_id": "flutterfirebase-bdf5b",
+    "storage_bucket": "flutterfirebase-bdf5b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15751013607:android:68bde1f7384b83607bae42",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15751013607-ocfcoc74un8ccaatmt5j2pkd1k5o8ent.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.application",
+            "certificate_hash": "6b9273d61ad106ec10c5e7c5b7e7d77ffbc56c71"
+          }
+        },
+        {
+          "client_id": "15751013607-cb6fmaar87ugodsb420dp52t6e0gu387.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT4LUWGJRixOHfYOuq59I0l0NG6tiPFNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15751013607-cb6fmaar87ugodsb420dp52t6e0gu387.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15751013607:android:4ab2e9b47421766c7bae42",
+        "android_client_info": {
+          "package_name": "com.example.flutter_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15751013607-cb6fmaar87ugodsb420dp52t6e0gu387.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT4LUWGJRixOHfYOuq59I0l0NG6tiPFNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15751013607-cb6fmaar87ugodsb420dp52t6e0gu387.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
