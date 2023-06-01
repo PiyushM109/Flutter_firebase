@@ -1,9 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/screens/components/textfield.dart';
 import 'package:flutter_firebase/screens/emai_auth/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
+
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController CPasswordController = TextEditingController();
+
+  void createAccount() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    String cpassword = CPasswordController.text.trim();
+    if (email == "" || password == "" || cpassword == "") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('All Fields are compulsory'),
+        ),
+      );
+    } else if (password != cpassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Password and Confirmpassword do not match'),
+        ),
+      );
+    } else {
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        if(userCredential.user != null){
+          Navigator.pop(context);
+        }
+      } on FirebaseAuthException catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('There are some problem'),
+        ),
+      );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,23 +77,26 @@ class SignupScreen extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
               child: MyTextField(
+                textController: emailController,
                 hintText: 'Email',
                 obscure: false,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
               child: MyTextField(
+                textController: passwordController,
                 hintText: 'Password',
                 obscure: true,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
               child: MyTextField(
+                textController: CPasswordController,
                 hintText: 'Confirm Password',
                 obscure: true,
               ),
@@ -53,9 +105,7 @@ class SignupScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      
-                    },
+                    onTap: createAccount,
                     child: Container(
                       margin: const EdgeInsets.only(
                         left: 10,
@@ -87,7 +137,9 @@ class SignupScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text("Already Have an account go to "),
-                SizedBox(width: 5,),
+                const SizedBox(
+                  width: 5,
+                ),
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(context);

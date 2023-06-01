@@ -1,9 +1,56 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/screens/components/textfield.dart';
 import 'package:flutter_firebase/screens/emai_auth/signup_screen.dart';
+import 'package:flutter_firebase/screens/home_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailController = TextEditingController();
+
+  TextEditingController passwordController = TextEditingController();
+
+  void login() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Email or password is empty.'),
+        ),
+      );
+    } else {
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        if (userCredential.user != null) {
+
+          Navigator.pop(context,(route)=> route.isFirst);
+
+          Navigator.push(
+              context, CupertinoPageRoute(builder: (context) => HomeScreen()));
+        }
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text("There is Some Error with Email or password"),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +75,18 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
               child: MyTextField(
+                textController: emailController,
                 hintText: 'Email',
                 obscure: false,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
               child: MyTextField(
+                textController: passwordController,
                 hintText: 'Password',
                 obscure: true,
               ),
@@ -46,7 +95,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: login,
                     child: Container(
                       margin: const EdgeInsets.only(
                         left: 10,
@@ -78,10 +127,13 @@ class LoginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text("Don't have an Account?"),
-                SizedBox(width: 5,),
+                const SizedBox(
+                  width: 5,
+                ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/signup');
+                    Navigator.push(
+              context, CupertinoPageRoute(builder: (context) => SignupScreen()));
                   },
                   child: const Text(
                     "Create an Account",

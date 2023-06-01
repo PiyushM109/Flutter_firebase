@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/screens/emai_auth/login_screen.dart';
@@ -20,11 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => LoginScreen(),
-        '/signup': (context) => SignupScreen(),
-      },
+      home: (FirebaseAuth.instance.currentUser != null) ? const HomeScreen() : LoginScreen(),
     );
   }
 }
