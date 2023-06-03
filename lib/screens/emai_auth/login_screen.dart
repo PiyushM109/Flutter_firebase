@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase/screens/components/textfield.dart';
 import 'package:flutter_firebase/screens/emai_auth/signup_screen.dart';
 import 'package:flutter_firebase/screens/home_screen.dart';
+import 'package:flutter_firebase/screens/phone_auth/signin_with_phone.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -35,10 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
           password: password,
         );
         if (userCredential.user != null) {
+          Navigator.popUntil(context, (route) => route.isFirst);
 
-          Navigator.pop(context,(route)=> route.isFirst);
-
-          Navigator.push(
+          Navigator.pushReplacement(
               context, CupertinoPageRoute(builder: (context) => HomeScreen()));
         }
       } on FirebaseAuthException catch (e) {
@@ -133,7 +133,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
-              context, CupertinoPageRoute(builder: (context) => SignupScreen()));
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => SignupScreen()));
                   },
                   child: const Text(
                     "Create an Account",
@@ -145,6 +147,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 )
               ],
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (context) => const SignInWithPhone()));
+              },
+              child: const Text(
+                "Verify using phone number",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
           ],
         ),
       ),
