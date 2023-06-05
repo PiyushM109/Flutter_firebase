@@ -19,7 +19,7 @@ void main() async {
   //   print(doc.data().toString());
   // }
 
-  // TO FETCH THE PERTICULAR DOCUMNET FROM FIRESTORE USING ID
+  // TO FETCH THE PERTICULAR DOCUMENT FROM FIRESTORE USING ID
   // DocumentSnapshot snapshot = await FirebaseFirestore.instance
   //     .collection("users")
   //     .doc("YypGaMRosLOHN2tMLipX")
@@ -46,17 +46,25 @@ void main() async {
   //     .set(newUserData);
   // print("New User Saved");
 
-
   //To update the data
-  await FirebaseFirestore.instance
-      .collection("users")
-      .doc("yPIYUsHuF6NqJGL10k9h")
-      .update({
-        "email" : "kriss123@gmail.com"
-      });
+  // await FirebaseFirestore.instance
+  //     .collection("users")
+  //     .doc("yPIYUsHuF6NqJGL10k9h")
+  //     .update({
+  //       "email" : "kriss123@gmail.com"
+  //     });
 
-      print("user updated");
+  //     print("user updated");
 
+  // TO DELETE THE DOCUMENT
+  // await FirebaseFirestore.instance
+  //     .collection("users")
+  //     .doc("yPIYUsHuF6NqJGL10k9h")
+  //     .delete();
+
+  //   print("User Deleted");
+
+  
 
   runApp(MyApp());
 }
