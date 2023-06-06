@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
 import 'components/textfield.dart';
 import 'emai_auth/login_screen.dart';
 
@@ -14,28 +15,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController NameController = TextEditingController();
-  TextEditingController EmailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
 
   void logout() async {
     await FirebaseAuth.instance.signOut();
-
-    Navigator.pop(context, (route) => route.isFirst);
-
     Navigator.push(
         context, CupertinoPageRoute(builder: (context) => LoginScreen()));
   }
 
   void saveUser() {
-    String name = NameController.text.toString();
-    String email = EmailController.text.toString();
-    NameController.clear();
-    EmailController.clear();
+    String name = nameController.text.toString();
+    String email = emailController.text.toString();
+    String ageString = ageController.text.toString();
+
+    int age = int.parse(ageString);
+    nameController.clear();
+    emailController.clear();
+    ageController.clear();
 
     if (name != "" && email != "") {
       Map<String, dynamic> newUser = {
         "name": name,
         "email": email,
+        "age" : age,
       };
 
       FirebaseFirestore.instance.collection("users").add(newUser);
@@ -64,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           "Data Collection",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 25,
+    
           ),
         ),
         actions: [
@@ -88,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: MyTextField(
                 hintText: "Name",
                 obscure: false,
-                textController: NameController,
+                textController: nameController,
               ),
             ),
             Padding(
@@ -96,12 +100,17 @@ class _HomeScreenState extends State<HomeScreen> {
               child: MyTextField(
                 hintText: "Email Address",
                 obscure: false,
-                textController: EmailController,
+                textController: emailController,
               ),
             ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: MyTextField(
+                hintText: "Age",
+                obscure: false,
+                textController: ageController,
+              ),
+            ),
             Row(
               children: [
                 Expanded(
@@ -147,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             StreamBuilder(
               stream:
-                  FirebaseFirestore.instance.collection("users").snapshots(),
+                  FirebaseFirestore.instance.collection("users").orderBy("age", descending: true).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.active) {
                   if (snapshot.hasData && snapshot.data != null) {
@@ -159,34 +168,42 @@ class _HomeScreenState extends State<HomeScreen> {
                               snapshot.data!.docs[index].data()
                                   as Map<String, dynamic>;
                           String documentId = snapshot.data!.docs[index].id;
-                          return ListTile(
-                            title: Text(userMap["name"]),
-                            subtitle: Text(userMap["email"]),
-                            trailing: IconButton(
-                              onPressed: () {
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(documentId)
-                                    .delete()
-                                    .then((value) {
-                                  // Delete successful
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      backgroundColor: Colors.lightBlue,
-                                      content: Text("User deleted"),
-                                    ),
-                                  );
-                                }).catchError((error) {
-                                  // Error occurred while deleting the document
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      backgroundColor: Colors.red,
-                                      content: Text("Error occured"),
-                                    ),
-                                  );
-                                });
-                              },
-                              icon: Icon(Icons.delete),
+                          return Container(
+                            padding: EdgeInsets.all(8),
+                            margin: EdgeInsets.only(top:10, left: 8, right: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey[300],
+                            ),
+                            child: ListTile(
+                              title: Text(userMap["name"]),
+                              subtitle: Text(userMap["email"] + "  (age: ${userMap["age"]})"),
+                              trailing: IconButton(
+                                onPressed: () {
+                                  FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(documentId)
+                                      .delete()
+                                      .then((value) {
+                                    // Delete successful
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        backgroundColor: Colors.lightBlue,
+                                        content: Text("User deleted"),
+                                      ),
+                                    );
+                                  }).catchError((error) {
+                                    // Error occurred while deleting the document
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content: Text("Error occured"),
+                                      ),
+                                    );
+                                  });
+                                },
+                                icon: Icon(Icons.delete),
+                              ),
                             ),
                           );
                         },
